@@ -1,63 +1,69 @@
 import turtle
 
 
-def perform_switch_case(state, t, turn, max_turns):
+def perform_switch_case(state, t, turn):
     x = round(t.position()[0] / 10)
     y = round(t.position()[1] / 10)
+    num_turns = 5
 
     if state == "INIT":
-        state = "DOWN"
-        t.setheading(270)  
-        return state, turn
 
+        if True:
+            state = "DOWN"
+            t.setheading(270)  # Разворот вниз
+            return state, turn
+        return state, turn
     if state == "DOWN":
-        t.forward(10)
+        t.forward(10)  # Перемещение
+
         if y <= -turn:
             state = "RIGHT"
-            t.setheading(0)
+            t.setheading(0)  # Разворот вправо
+            return state, turn
+        if turn > num_turns:
+            state = "STOP"
+            return state, turn
         return state, turn
-
     if state == "RIGHT":
-        t.forward(10)
+        t.forward(10)  # Перемещение
+
         if x >= turn:
             state = "UP"
-            t.setheading(90)  
+            t.setheading(90)  # Разворот вверх
+            return state, turn
         return state, turn
-
     if state == "UP":
-        t.forward(10)
+        t.forward(10)  # Перемещение
+
         if y >= turn:
             state = "LEFT"
-            t.setheading(180)  
+            t.setheading(180)  # Разворот влево
+            return state, turn
         return state, turn
-
     if state == "LEFT":
-        t.forward(10)
-        if x <= -turn:
-            turn += 1
-            if turn > max_turns:
-                state = "STOP"
-            else:
-                state = "DOWN"
-                t.setheading(270)  
-        return state, turn
+        t.forward(10)  # Перемещение
 
+        if x <= -turn:
+            state = "DOWN"
+            turn = turn + 1  # Начало нового витка
+            t.setheading(270)  # Разворот вниз
+            return state, turn
+        return state, turn
     return state, turn
 
 
 def draw():
-    curr_state = "INIT"
+    start_state = "INIT"
+    end_state = "STOP"
+    curr_state = start_state
     t = turtle.Turtle()
     t.speed(0)
-    t.pensize(1)
     turn = 1
-    max_turns = 5  
 
-    while curr_state != "STOP":
-        curr_state, turn = perform_switch_case(curr_state, t, turn, max_turns)
-
+    while curr_state != end_state:
+        curr_state, turn = perform_switch_case(curr_state, t, turn)
     turtle.done()
 
 
-if __name__ == "__main__":
+if  __name__ == "__main__":
     draw()
